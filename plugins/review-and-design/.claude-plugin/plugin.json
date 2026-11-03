@@ -1,0 +1,10 @@
+{
+  "name": "review-and-design",
+  "version": "1.0.0",
+  "description": "Backend, frontend and UX reviewers, PR feedback, RFCs, decision decks and logging standards.",
+  "author": {
+    "name": "ShepardVasNormandy"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/ShepardVasNormandy/claude-skills"
+}

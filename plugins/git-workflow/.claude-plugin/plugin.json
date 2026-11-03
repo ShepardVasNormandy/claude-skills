@@ -1,0 +1,10 @@
+{
+  "name": "git-workflow",
+  "version": "1.0.0",
+  "description": "Worktrees, stacked PRs, commits, changesets, dependency CVEs and flaky tests.",
+  "author": {
+    "name": "ShepardVasNormandy"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/ShepardVasNormandy/claude-skills"
+}

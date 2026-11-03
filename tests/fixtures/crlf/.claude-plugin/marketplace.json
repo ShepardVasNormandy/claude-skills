@@ -1,0 +1,7 @@
+{
+  "name": "claude-skills",
+  "owner": { "name": "ShepardVasNormandy" },
+  "plugins": [
+    { "name": "demo", "source": "./plugins/demo", "description": "Demo plugin used by the test suite." }
+  ]
+}

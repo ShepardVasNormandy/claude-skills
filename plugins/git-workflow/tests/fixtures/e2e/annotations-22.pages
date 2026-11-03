@@ -1,0 +1,3 @@
+[
+  {"annotation_level": "failure", "title": "cart.spec.ts > cart > keeps items after reload", "message": "expected 2 items, got 0\n"}
+]

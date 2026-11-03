@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inbox</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    color-scheme: light;
+    --font-sans:    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono:    ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    --bg:           #f6f7f9;
+    --surface:      #ffffff;
+    --surface-hover:#f1f3f6;
+    --border:       #e4e7ec;
+    --text:         #14181f;
+    --muted:        #8a929e;
+    --muted-light:  #5d6672;
+    --accent:       #2f5fd0;
+    --header-bg:    rgba(246,247,249,0.94);
+    --footer-bg:    rgba(246,247,249,0.96);
+    --check-mark:   #ffffff;
+    --c-tracker:  #5b5bd6;
+    --c-github:  #24292f;
+    --c-slack:   #8a3f8f;
+    --c-overdue: #c4302b;
+    --c-urgent:  #b86e00;
+    --c-high:    #b86e00;
+    --c-medium:  #2f6db5;
+    --c-low:     #e4e7ec;
+    --c-green:   #2e7d4f;
+    --b-overdue-bg: rgba(196,48,43,0.10);   --b-overdue-fg: #a32924;
+    --b-urgent-bg:  rgba(184,110,0,0.12);   --b-urgent-fg:  #7a4a00;
+    --b-medium-bg:  rgba(47,109,181,0.10);  --b-medium-fg:  #24558c;
+    --b-low-bg:     rgba(20,24,31,0.05);    --b-low-fg:     #5d6672;
+    --b-repo-bg:    rgba(36,41,47,0.07);    --b-repo-fg:    #24292f;
+    --b-author-bg:  rgba(46,125,79,0.10);   --b-author-fg:  #23613d;
+    --b-channel-bg: rgba(138,63,143,0.10);  --b-channel-fg: #6e3272;
+    --s-triage-bg:   rgba(196,90,20,0.12);  --s-triage-fg:   #9a4610;
+    --s-backlog-bg:  rgba(20,24,31,0.05);   --s-backlog-fg:  #667085;
+    --s-todo-bg:     rgba(20,24,31,0.08);   --s-todo-fg:     #4a525e;
+    --s-started-bg:  rgba(184,140,0,0.14);  --s-started-fg:  #6f5500;
+    --s-review-bg:   rgba(47,109,181,0.12); --s-review-fg:   #24558c;
+    --s-done-bg:     rgba(46,125,79,0.12);  --s-done-fg:     #23613d;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg:           #0f1216;
+      --surface:      #171b21;
+      --surface-hover:#1e232a;
+      --border:       #2a3038;
+      --text:         #e8ebef;
+      --muted:        #6d7580;
+      --muted-light:  #9aa3ae;
+      --accent:       #7ea6ff;
+      --header-bg:    rgba(15,18,22,0.94);
+      --footer-bg:    rgba(15,18,22,0.96);
+      --check-mark:   #0f1216;
+      --c-tracker:  #9d9dfa;
+      --c-github:  #c9d1d9;
+      --c-slack:   #d08ad4;
+      --c-overdue: #f07a74;
+      --c-urgent:  #e2a44a;
+      --c-high:    #e2a44a;
+      --c-medium:  #6fa5e8;
+      --c-low:     #2a3038;
+      --c-green:   #5fbf87;
+      --b-overdue-bg: rgba(240,122,116,0.15); --b-overdue-fg: #f5a29d;
+      --b-urgent-bg:  rgba(226,164,74,0.16);  --b-urgent-fg:  #f0c27f;
+      --b-medium-bg:  rgba(111,165,232,0.15); --b-medium-fg:  #9cc2f0;
+      --b-low-bg:     rgba(154,163,174,0.12); --b-low-fg:     #9aa3ae;
+      --b-repo-bg:    rgba(201,209,217,0.10); --b-repo-fg:    #c9d1d9;
+      --b-author-bg:  rgba(95,191,135,0.14);  --b-author-fg:  #8fd6ab;
+      --b-channel-bg: rgba(208,138,212,0.14); --b-channel-fg: #e0aee3;
+      --s-triage-bg:   rgba(240,140,70,0.16); --s-triage-fg:   #f4ad7a;
+      --s-backlog-bg:  rgba(154,163,174,0.10);--s-backlog-fg:  #8a929e;
+      --s-todo-bg:     rgba(154,163,174,0.16);--s-todo-fg:     #b4bcc6;
+      --s-started-bg:  rgba(226,190,74,0.16); --s-started-fg:  #ecd07f;
+      --s-review-bg:   rgba(111,165,232,0.16);--s-review-fg:   #9cc2f0;
+      --s-done-bg:     rgba(95,191,135,0.16); --s-done-fg:     #8fd6ab;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg:           #0f1216;
+    --surface:      #171b21;
+    --surface-hover:#1e232a;
+    --border:       #2a3038;
+    --text:         #e8ebef;
+    --muted:        #6d7580;
+    --muted-light:  #9aa3ae;
+    --accent:       #7ea6ff;
+    --header-bg:    rgba(15,18,22,0.94);
+    --footer-bg:    rgba(15,18,22,0.96);
+    --check-mark:   #0f1216;
+    --c-tracker:  #9d9dfa;
+    --c-github:  #c9d1d9;
+    --c-slack:   #d08ad4;
+    --c-overdue: #f07a74;
+    --c-urgent:  #e2a44a;
+    --c-high:    #e2a44a;
+    --c-medium:  #6fa5e8;
+    --c-low:     #2a3038;
+    --c-green:   #5fbf87;
+    --b-overdue-bg: rgba(240,122,116,0.15); --b-overdue-fg: #f5a29d;
+    --b-urgent-bg:  rgba(226,164,74,0.16);  --b-urgent-fg:  #f0c27f;
+    --b-medium-bg:  rgba(111,165,232,0.15); --b-medium-fg:  #9cc2f0;
+    --b-low-bg:     rgba(154,163,174,0.12); --b-low-fg:     #9aa3ae;
+    --b-repo-bg:    rgba(201,209,217,0.10); --b-repo-fg:    #c9d1d9;
+    --b-author-bg:  rgba(95,191,135,0.14);  --b-author-fg:  #8fd6ab;
+    --b-channel-bg: rgba(208,138,212,0.14); --b-channel-fg: #e0aee3;
+    --s-triage-bg:   rgba(240,140,70,0.16); --s-triage-fg:   #f4ad7a;
+    --s-backlog-bg:  rgba(154,163,174,0.10);--s-backlog-fg:  #8a929e;
+    --s-todo-bg:     rgba(154,163,174,0.16);--s-todo-fg:     #b4bcc6;
+    --s-started-bg:  rgba(226,190,74,0.16); --s-started-fg:  #ecd07f;
+    --s-review-bg:   rgba(111,165,232,0.16);--s-review-fg:   #9cc2f0;
+    --s-done-bg:     rgba(95,191,135,0.16); --s-done-fg:     #8fd6ab;
+  }
+
+  html { font-size: 14px; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-sans);
+         font-weight: 400; line-height: 1.5; min-height: 100vh; padding-bottom: 80px;
+         transition: background 0.2s, color 0.2s; }
+
+  header { position: sticky; top: 0; z-index: 100; background: var(--header-bg);
+            backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
+            padding: 14px 32px; display: flex; align-items: center; gap: 24px; }
+  .header-title { font-family: var(--font-sans); font-weight: 800; font-size: 1.05rem;
+                  letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+  .header-date  { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted-light); }
+  .header-pills { display: flex; gap: 8px; margin-left: auto; align-items: center; }
+  .pill { display: flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px;
+          font-family: var(--font-mono); font-size: 0.68rem;
+          border: 1px solid var(--border); color: var(--muted-light); }
+  .pill .dot { width: 5px; height: 5px; border-radius: 50%; }
+  .pill.tracker .dot { background: var(--c-tracker); }
+  .pill.github .dot { background: var(--c-github); }
+  .pill.slack  .dot { background: var(--c-slack); }
+  .pill .count { color: var(--text); font-weight: 500; }
+  .refresh-hint { font-family: var(--font-mono); font-size: 0.65rem; color: var(--muted);
+                  padding: 4px 10px; border: 1px dashed var(--border); border-radius: 4px; }
+
+  .theme-btn { background: none; border: 1px solid var(--border); border-radius: 6px;
+               padding: 4px 8px; cursor: pointer; font-size: 0.8rem; color: var(--muted-light);
+               transition: border-color 0.15s, color 0.15s; }
+  .theme-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  main { max-width: 860px; margin: 0 auto; padding: 40px 32px 0; }
+
+  .source-section { margin-bottom: 48px; opacity: 0; animation: fadeUp 0.4s ease forwards; }
+  .source-section:nth-child(1) { animation-delay: 0.05s; }
+  .source-section:nth-child(2) { animation-delay: 0.12s; }
+  .source-section:nth-child(3) { animation-delay: 0.19s; }
+  .source-section:nth-child(4) { animation-delay: 0.26s; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+  .source-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px;
+                   padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .source-name { font-family: var(--font-sans); font-weight: 700; font-size: 0.78rem;
+                 letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none;
+                 transition: opacity 0.15s; }
+  .source-name:hover { opacity: 0.7; }
+  .source-name.tracker { color: var(--c-tracker); }
+  .source-name.github { color: var(--c-github); }
+  .source-name.slack  { color: var(--c-slack); }
+  .source-count { font-family: var(--font-mono); font-size: 0.68rem; color: var(--muted-light); }
+  .source-error { font-family: var(--font-mono); font-size: 0.68rem; color: var(--c-overdue); }
+
+  .group { margin-bottom: 24px; }
+  .group-label { font-family: var(--font-mono); font-size: 0.62rem;
+                 letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+                 margin-bottom: 6px; padding-left: 12px; }
+
+  .item { display: flex; align-items: center; gap: 10px; padding: 9px 12px 9px 14px;
+          margin-bottom: 3px; background: var(--surface); border-radius: 6px;
+          border-left: 3px solid var(--c-low); cursor: pointer;
+          transition: background 0.12s, opacity 0.2s;
+          opacity: 0; animation: fadeIn 0.25s ease forwards; }
+  .item:hover { background: var(--surface-hover); }
+  .item.done { opacity: 0.3; }
+  .item.done .item-title { text-decoration: line-through; }
+  .item.overdue { border-left-color: var(--c-overdue); }
+  .item.urgent  { border-left-color: var(--c-urgent); }
+  .item.high    { border-left-color: var(--c-high); }
+  .item.medium  { border-left-color: var(--c-medium); }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+  .item:nth-child(1)  { animation-delay:0.10s; } .item:nth-child(2)  { animation-delay:0.13s; }
+  .item:nth-child(3)  { animation-delay:0.16s; } .item:nth-child(4)  { animation-delay:0.19s; }
+  .item:nth-child(5)  { animation-delay:0.22s; } .item:nth-child(6)  { animation-delay:0.25s; }
+  .item:nth-child(7)  { animation-delay:0.28s; } .item:nth-child(8)  { animation-delay:0.31s; }
+  .item:nth-child(9)  { animation-delay:0.34s; } .item:nth-child(10) { animation-delay:0.37s; }
+  .item:nth-child(n+11) { animation-delay:0.40s; }
+
+  .check { width:15px; height:15px; border-radius:3px; border:1px solid var(--muted);
+           flex-shrink:0; display:flex; align-items:center; justify-content:center;
+           transition: background 0.1s, border-color 0.1s; }
+  .item.done .check { background: var(--muted); border-color: var(--muted); }
+  .item.done .check::after { content:''; width:8px; height:5px;
+    border-left:1.5px solid var(--check-mark); border-bottom:1.5px solid var(--check-mark);
+    transform: rotate(-45deg) translateY(-1px); display:block; }
+
+  .item-id { font-family:var(--font-mono); font-size:0.65rem; color:var(--muted-light);
+             white-space:nowrap; flex-shrink:0; min-width:76px; text-decoration:none;
+             transition: color 0.1s; }
+  .item-id:hover { color: var(--text); }
+
+  .item-title { flex:1; font-size:0.82rem; font-weight:400; color:var(--text);
+                white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .item-title a { color:inherit; text-decoration:none; }
+  .item-title a:hover { color: var(--accent); }
+
+  .item-meta { display:flex; align-items:center; gap:6px; flex-shrink:0; }
+  .badge { font-family:var(--font-mono); font-size:0.6rem; padding:2px 6px;
+           border-radius:3px; white-space:nowrap; font-weight:500; }
+  .badge.overdue { background: var(--b-overdue-bg); color: var(--b-overdue-fg); }
+  .badge.urgent  { background: var(--b-urgent-bg);  color: var(--b-urgent-fg); }
+  .badge.high    { background: var(--b-urgent-bg);  color: var(--b-urgent-fg); }
+  .badge.medium  { background: var(--b-medium-bg);  color: var(--b-medium-fg); }
+  .badge.low     { background: var(--b-low-bg);     color: var(--b-low-fg); }
+  .badge.repo    { background: var(--b-repo-bg);    color: var(--b-repo-fg); }
+  .badge.author  { background: var(--b-author-bg);  color: var(--b-author-fg); }
+  .badge.channel { background: var(--b-channel-bg); color: var(--b-channel-fg); }
+  .badge.status-triage    { background: var(--s-triage-bg);  color: var(--s-triage-fg); }
+  .badge.status-backlog   { background: var(--s-backlog-bg); color: var(--s-backlog-fg); }
+  .badge.status-unstarted { background: var(--s-todo-bg);    color: var(--s-todo-fg); }
+  .badge.status-started   { background: var(--s-started-bg); color: var(--s-started-fg); }
+  .badge.status-review    { background: var(--s-review-bg);  color: var(--s-review-fg); }
+  .badge.status-completed { background: var(--s-done-bg);    color: var(--s-done-fg); }
+  .item-time { font-family:var(--font-mono); font-size:0.6rem;
+               color:var(--muted); white-space:nowrap; }
+
+  footer { position:fixed; bottom:0; left:0; right:0; background: var(--footer-bg);
+           border-top:1px solid var(--border); padding:10px 32px;
+           display:flex; align-items:center; gap:16px;
+           font-family:var(--font-mono); font-size:0.65rem; color:var(--muted); }
+  .footer-sources { display:flex; gap:12px; }
+  .ok   { color: var(--c-green); }
+  .fail { color: var(--c-overdue); }
+  .footer-hint { margin-left:auto; }
+  .footer-hint code { background:var(--surface); padding:2px 5px; border-radius:3px; color:var(--accent); }
+
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+</style>
+</head>
+<body>
+<header id="app-header">
+  <span class="header-title">Inbox</span>
+  <span class="header-date" id="header-date"></span>
+  <div class="header-pills" id="header-pills"></div>
+  <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle light/dark">☀︎</button>
+</header>
+
+<main id="app-main"></main>
+<footer id="app-footer"></footer>
+
+<script>
+const DATA = __INBOX_DATA__;
+
+function storedTheme() {
+  try { return localStorage.getItem('inbox-theme'); } catch (e) { return null; }
+}
+function currentTheme() {
+  const set = document.documentElement.getAttribute('data-theme');
+  if (set) return set;
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+function applyTheme(t) {
+  if (t) document.documentElement.setAttribute('data-theme', t);
+  document.getElementById('theme-btn').textContent = currentTheme() === 'dark' ? '☀︎' : '☾';
+}
+function toggleTheme() {
+  const next = currentTheme() === 'dark' ? 'light' : 'dark';
+  try { localStorage.setItem('inbox-theme', next); } catch (e) {}
+  applyTheme(next);
+}
+applyTheme(storedTheme());
+
+const PRIORITY_CLASS = { overdue:'overdue', urgent:'urgent', high:'high', medium:'medium',
+                         low:'low', none:'low', soon:'low', backlog:'low', priority:'high' };
+const STATUS_TYPE_CLASS = {
+  triage:'status-triage', backlog:'status-backlog', unstarted:'status-unstarted',
+  started:'status-started', completed:'status-completed', canceled:'status-backlog',
+};
+function statusClass(item) {
+  if (/review/i.test(item.status || '')) return 'status-review';
+  return STATUS_TYPE_CLASS[item.statusType] || 'status-backlog';
+}
+const GROUP_ORDER  = ['overdue','soon','priority','backlog'];
+const GROUP_LABELS = { overdue:'⚠ Overdue', soon:'Due soon', priority:'Urgent · High · Medium', backlog:'Backlog' };
+const SOURCE_URLS  = { github:'https://github.com', slack:'https://slack.com' };
+
+function el(tag, attrs={}, ...children) {
+  const e = document.createElement(tag);
+  for (const [k,v] of Object.entries(attrs)) {
+    if (k === 'cls') e.className = v;
+    else e.setAttribute(k, v);
+  }
+  children.forEach(c => c && e.append(typeof c === 'string' ? document.createTextNode(c) : c));
+  return e;
+}
+function badge(text, cls) { return el('span', {cls:`badge ${cls}`}, text); }
+
+function itemRow(priority, id, idHref, title, titleHref, metaNodes) {
+  const row = el('div', {cls:`item ${PRIORITY_CLASS[priority]||'low'}`});
+  row.onclick = e => { if (e.target.tagName==='A') return; row.classList.toggle('done'); };
+  const idEl = idHref ? el('a', {cls:'item-id', href:idHref, target:'_blank'}, id)
+                      : el('span', {cls:'item-id'}, id);
+  const titleEl = el('span', {cls:'item-title'}, el('a', {href:titleHref, target:'_blank'}, title));
+  const meta = el('div', {cls:'item-meta'});
+  metaNodes.forEach(n => n && meta.append(n));
+  row.append(el('div',{cls:'check'}), idEl, titleEl, meta);
+  return row;
+}
+
+function renderTracker() {
+  const src = DATA.sources.tracker;
+  const name = src.name || 'Tracker';
+  if (!src.available) return null;
+  const sec = el('section', {cls:'source-section'});
+  const hdr = el('div', {cls:'source-header'});
+  hdr.append(
+    src.error || !src.url ? el('span', {cls:'source-name tracker'}, name)
+                          : el('a', {cls:'source-name tracker', href:src.url, target:'_blank'}, `${name} ↗`),
+    src.error ? el('span', {cls:'source-error'}, `⚠ ${src.error}`)
+              : el('span', {cls:'source-count'}, `${src.count} open`)
+  );
+  sec.append(hdr);
+  if (src.error) return sec;
+
+  const groups = {};
+  (DATA.tracker||[]).forEach(i => { if (!groups[i.group]) groups[i.group]=[]; groups[i.group].push(i); });
+  GROUP_ORDER.forEach(g => {
+    const items = groups[g];
+    if (!items?.length) return;
+    const grp = el('div', {cls:'group'});
+    grp.append(el('div', {cls:'group-label'}, GROUP_LABELS[g]||g));
+    items.forEach(item => {
+      const p = g === 'overdue' ? 'overdue' : item.priority;
+      const statusCls = statusClass(item);
+      grp.append(itemRow(p, item.id, item.url, item.title, item.url, [
+        item.status ? el('span', {cls:`badge ${statusCls}`}, item.status) : null,
+        item.priority && item.priority !== 'none' ? badge(item.priority, item.priority) : null,
+        item.due ? el('span', {cls:`badge ${g==='overdue'?'overdue':'low'}`}, `Due ${item.due}`) : null,
+      ]));
+    });
+    sec.append(grp);
+  });
+  return sec;
+}
+
+function renderGitHub() {
+  const src = DATA.sources.github;
+  if (!src.available) return null;
+  const prs = DATA.github_prs || [], issues = DATA.github_issues || [];
+  if (!prs.length && !issues.length && !src.error) return null;
+
+  const sec = el('section', {cls:'source-section'});
+  const hdr = el('div', {cls:'source-header'});
+  hdr.append(
+    src.error ? el('span', {cls:'source-name github'}, 'GitHub')
+              : el('a', {cls:'source-name github', href:SOURCE_URLS.github, target:'_blank'}, 'GitHub ↗'),
+    src.error ? el('span', {cls:'source-error'}, `⚠ ${src.error}`)
+              : el('span', {cls:'source-count'}, `${prs.length} PRs · ${issues.length} issues`)
+  );
+  sec.append(hdr);
+  if (src.error) return sec;
+
+  if (prs.length) {
+    const grp = el('div', {cls:'group'});
+    grp.append(el('div', {cls:'group-label'}, 'PRs to review'));
+    prs.forEach(pr => {
+      grp.append(itemRow('medium', `#${pr.number}`, pr.url, pr.title, pr.url, [
+        badge(pr.repo.split('/')[1]||pr.repo, 'repo'),
+        badge(`@${pr.author}`, 'author'),
+        el('span', {cls:'item-time'}, pr.ago),
+      ]));
+    });
+    sec.append(grp);
+  }
+  if (issues.length) {
+    const grp = el('div', {cls:'group'});
+    grp.append(el('div', {cls:'group-label'}, 'Assigned issues'));
+    issues.forEach(issue => {
+      grp.append(itemRow('low', `#${issue.number}`, issue.url, issue.title, issue.url, [
+        badge(issue.repo.split('/')[1]||issue.repo, 'repo'),
+        el('span', {cls:'item-time'}, issue.ago),
+      ]));
+    });
+    sec.append(grp);
+  }
+  return sec;
+}
+
+function renderSlack() {
+  const src = DATA.sources.slack;
+  if (!src.available) return null;
+  const items = DATA.slack || [];
+  if (!items.length && !src.error) return null;
+
+  const sec = el('section', {cls:'source-section'});
+  const hdr = el('div', {cls:'source-header'});
+  const wsUrl = items[0]?.url?.match(/https:\/\/[^/]+\.slack\.com/)?.[0] || SOURCE_URLS.slack;
+  hdr.append(
+    src.error ? el('span', {cls:'source-name slack'}, 'Slack')
+              : el('a', {cls:'source-name slack', href:wsUrl, target:'_blank'}, 'Slack ↗'),
+    src.error ? el('span', {cls:'source-error'}, `⚠ ${src.error}`)
+              : el('span', {cls:'source-count'}, `${items.length} mentions`)
+  );
+  sec.append(hdr);
+  if (src.error) return sec;
+
+  const grp = el('div', {cls:'group'});
+  items.forEach(item => {
+    const row = el('div', {cls:`item ${PRIORITY_CLASS[item.urgency]||'medium'}`});
+    row.onclick = e => { if(e.target.tagName==='A') return; row.classList.toggle('done'); };
+    const meta = el('div', {cls:'item-meta'});
+    meta.append(badge(item.channel,'channel'), badge(item.author,'author'), el('span',{cls:'item-time'},item.ago));
+    row.append(el('div',{cls:'check'}),
+      el('span',{cls:'item-title'}, el('a',{href:item.url,target:'_blank'}, `"${item.quote}"`)),
+      meta);
+    grp.append(row);
+  });
+  sec.append(grp);
+  return sec;
+}
+
+document.getElementById('header-date').textContent = `${DATA.date} · ${DATA.time}`;
+document.title = `Inbox — ${DATA.date}`;
+
+const sourceLabel = s => s === 'tracker' ? (DATA.sources.tracker.name || 'Tracker') : s[0].toUpperCase()+s.slice(1);
+const pills = document.getElementById('header-pills');
+['tracker','github','slack'].forEach(s => {
+  const src = DATA.sources[s];
+  if (!src.available) return;
+  const p = el('span', {cls:`pill ${s}`});
+  p.append(el('span',{cls:'dot'}), el('span',{cls:'count'}, src.count), ` ${sourceLabel(s)}`);
+  pills.append(p);
+});
+pills.append(el('span',{cls:'refresh-hint'},'/inbox to refresh'));
+
+const main = document.getElementById('app-main');
+[renderTracker(), renderGitHub(), renderSlack()].forEach(s => s && main.append(s));
+
+const footer = document.getElementById('app-footer');
+const srcSpans = el('div', {cls:'footer-sources'});
+srcSpans.append(document.createTextNode('Sources:'));
+['tracker','github','slack'].forEach(s => {
+  const src = DATA.sources[s];
+  srcSpans.append(el('span', {cls: src.available && !src.error ? 'ok' : 'fail'},
+    `${sourceLabel(s)} ${src.available && !src.error ? '✓' : src.available ? '⚠' : '✗'}`));
+});
+const hint = el('span', {cls:'footer-hint'});
+hint.innerHTML = `Generated ${DATA.time} &nbsp;·&nbsp; Re-run <code>/inbox</code> to refresh`;
+footer.append(srcSpans, hint);
+</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "name": "claude-skills",
+  "owner": {
+    "name": "ShepardVasNormandy"
+  },
+  "description": "Generic Claude Code workflow skills for software teams, personalised per project through config: git workflow, agent discipline, review and design, and team routines.",
+  "plugins": [
+    {
+      "name": "git-workflow",
+      "source": "./plugins/git-workflow",
+      "description": "Worktrees, stacked PRs, commits, changesets, dependency CVEs and flaky tests."
+    },
+    {
+      "name": "agent-discipline",
+      "source": "./plugins/agent-discipline",
+      "description": "Keep agents on task, precise and cheap: scope guard, controlled English, model routing, skill authoring, skill updates."
+    },
+    {
+      "name": "review-and-design",
+      "source": "./plugins/review-and-design",
+      "description": "Backend, frontend and UX reviewers, PR feedback, RFCs, decision decks and logging standards."
+    },
+    {
+      "name": "team-workflow",
+      "source": "./plugins/team-workflow",
+      "description": "A daily to-do page of your assigned tickets, Slack mentions and PR review requests."
+    }
+  ]
+}

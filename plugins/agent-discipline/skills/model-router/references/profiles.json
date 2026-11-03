@@ -1,0 +1,14 @@
+{
+  "claude-code": {
+    "basic": { "model": "haiku", "efforts": [] },
+    "workhorse": { "model": "sonnet", "efforts": ["low", "medium", "high", "xhigh"] },
+    "intense": { "model": "opus", "efforts": ["low", "medium", "high", "xhigh"] },
+    "frontier": { "model": "fable", "efforts": ["low", "medium", "high", "xhigh"] }
+  },
+  "codex": {
+    "basic": { "model": "gpt-6-luna", "efforts": ["low", "medium", "high"] },
+    "workhorse": { "model": "gpt-6.1-sol", "efforts": ["low", "medium", "high", "xhigh"] },
+    "intense": { "model": "gpt-6-astra", "efforts": ["low", "medium", "high", "xhigh"] },
+    "frontier": { "model": "gpt-6-astra", "efforts": ["low", "medium", "high", "xhigh"] }
+  }
+}

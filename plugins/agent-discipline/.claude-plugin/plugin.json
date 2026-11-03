@@ -1,0 +1,10 @@
+{
+  "name": "agent-discipline",
+  "version": "1.0.0",
+  "description": "Keep agents on task, precise and cheap: scope guard, controlled English, model routing, skill authoring, skill updates.",
+  "author": {
+    "name": "ShepardVasNormandy"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/ShepardVasNormandy/claude-skills"
+}

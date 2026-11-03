@@ -1,0 +1,22 @@
+{
+  "tier": {
+    "type": "choice",
+    "instructions": "Pick the tier of model that should carry out the task in `task`. Judge the task as written. Do not solve it.",
+    "criteria": {
+      "basic": "Mechanical or tightly scoped: rename, format, lookup, extraction, a simple edit that a glance or a test can verify. Little reasoning, low cost of error.",
+      "workhorse": "Routine engineering: apply a known approach to a clear case, a feature or fix in a few files, write tests, summarize. Needs competence, not deep reasoning.",
+      "intense": "Hard engineering: non-obvious debugging, refactor across many files, review for subtle risks, design trade-offs, or high-stakes but bounded work (money, security, production data) where a mistake is costly or irreversible.",
+      "frontier": "Rare. Only a long-horizon effort that a strong model at high effort would likely fail: design or build a whole new system or project from scratch, a deep security audit across a codebase, multistep deep research carried through to a finished document. Stakes alone (money, security, production data) never make a task frontier: a bounded high-stakes task is intense."
+    }
+  },
+  "effort": {
+    "type": "choice",
+    "instructions": "Pick the reasoning effort the task in `task` deserves. Judge the task as written. Do not solve it.",
+    "criteria": {
+      "low": "Quick, well-scoped, little to think about.",
+      "medium": "Some planning or a few steps, balanced speed and depth.",
+      "high": "Difficult, multiple steps, sources or trade-offs.",
+      "xhigh": "Long-horizon, needs the deepest analysis."
+    }
+  }
+}

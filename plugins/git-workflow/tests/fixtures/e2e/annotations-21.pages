@@ -1,0 +1,8 @@
+[
+  {"annotation_level": "failure", "title": "checkout.spec.ts > checkout > pays with a saved card", "message": "Timed out waiting for the payment iframe\n"},
+  {"annotation_level": "failure", "title": "checkout.spec.ts > checkout > pays with a saved card", "message": "Timed out waiting for the payment iframe\n"}
+]
+[
+  {"annotation_level": "warning", "title": "slow test file", "message": "checkout.spec.ts took 61s\n"},
+  {"annotation_level": "failure", "title": "", "message": "Process completed with exit code 1.\n"}
+]

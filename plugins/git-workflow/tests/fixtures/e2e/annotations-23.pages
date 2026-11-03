@@ -1,0 +1,3 @@
+[
+  {"annotation_level": "failure", "title": "checkout.spec.ts > checkout > pays with a saved card", "message": "Card form never became visible\n"}
+]

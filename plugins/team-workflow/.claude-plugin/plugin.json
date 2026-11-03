@@ -1,0 +1,10 @@
+{
+  "name": "team-workflow",
+  "version": "1.0.0",
+  "description": "A daily to-do page of your assigned tickets, Slack mentions and PR review requests.",
+  "author": {
+    "name": "ShepardVasNormandy"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/ShepardVasNormandy/claude-skills"
+}
